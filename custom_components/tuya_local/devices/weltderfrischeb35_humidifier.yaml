@@ -1,0 +1,151 @@
+name: Humidifier
+# products: Welt Der Frische B35 Humidifier
+# Product ID: jshb4svrpztw4h55
+# Device ID: bfcbad063eab64db0ewusg
+entities:
+  - entity: humidifier
+    class: humidifier
+    dps:
+      # DP 1 - Питание (вкл/выкл)
+      - id: 1
+        name: switch
+        type: boolean
+        mapping:
+          - dps_val: false
+            icon: "mdi:air-humidifier-off"
+            icon_priority: 1
+          - dps_val: true
+            icon: "mdi:air-humidifier"
+            icon_priority: 3
+
+      # DP 102 - Режим работы
+      - id: 102
+        name: mode
+        type: string
+        mapping:
+          - dps_val: "nor_mode"
+            value: normal
+            icon: "mdi:weather-sunny"
+            icon_priority: 2
+          - dps_val: "sleep_mode"
+            value: sleep
+            icon: "mdi:weather-night"
+            icon_priority: 2
+          - dps_val: "disoff_mode"
+            value: auto
+            icon: "mdi:brightness-auto"
+            icon_priority: 2
+
+      # DP 14 - Текущая влажность
+      - id: 14
+        type: integer
+        name: current_humidity
+
+      # DP 104 - Целевая влажность (строка!)
+      - id: 104
+        type: string
+        name: humidity
+        range:
+          min: 30
+          max: 55
+          step: 5
+
+  # Температура как отдельный сенсор
+  - entity: sensor
+    class: temperature
+    dps:
+      - id: 10
+        type: integer
+        name: sensor
+        unit: C
+        class: measurement
+
+  # Дополнительный сенсор текущей влажности
+  - entity: sensor
+    class: humidity
+    dps:
+      - id: 14
+        type: integer
+        name: sensor
+        unit: "%"
+        class: measurement
+
+  # Уровень мощности
+  - entity: select
+    name: Power Level
+    translation_key: power_level
+    category: config
+    dps:
+      - id: 23
+        type: string
+        name: option
+        mapping:
+          - dps_val: "level_1"
+            value: low
+          - dps_val: "level_2"
+            value: medium
+          - dps_val: "level_3"
+            value: high
+
+  # Температура нагрева
+  - entity: select
+    name: Heating Level
+    translation_key: heating_level
+    category: config
+    dps:
+      - id: 103
+        type: string
+        name: option
+        mapping:
+          - dps_val: "cancel"
+            value: "off"
+          - dps_val: "1"
+            value: low
+          - dps_val: "2"
+            value: medium
+          - dps_val: "3"
+            value: high
+
+  # Таймер отключения
+  - entity: number
+    name: Timer
+    translation_key: timer
+    category: config
+    dps:
+      - id: 20
+        type: integer
+        name: value
+        unit: min
+        range:
+          min: 0
+          max: 720
+
+  # Блокировка от детей
+  - entity: lock
+    name: Child Lock
+    translation_key: child_lock
+    category: config
+    dps:
+      - id: 29
+        type: boolean
+        name: lock
+        mapping:
+          - dps_val: false
+            value: unlocked
+          - dps_val: true
+            value: locked
+
+  # Автоматический режим
+  - entity: switch
+    name: Auto Mode
+    translation_key: auto_mode
+    category: config
+    dps:
+      - id: 101
+        type: boolean
+        name: switch
+        mapping:
+          - dps_val: false
+            icon: "mdi:robot-off"
+          - dps_val: true
+            icon: "mdi:robot"
